@@ -11,7 +11,7 @@
 
 #define NUM_READERS 5 // max of 6. More readers would require a new multi_rfid object
 
-Multi_PN5180_MCP23008 RFID_Readers(NUM_READERS, &Wire, I2C_Address, SPI);
+Multi_RFID_PN5180_MCP23008 RFID_Readers(NUM_READERS, &Wire, I2C_Address, SPI);
 
 void setup(){
     SPI.setRX(PN5180_MISO);

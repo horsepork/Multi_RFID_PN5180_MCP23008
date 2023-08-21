@@ -3,7 +3,7 @@
 #include "PN5180.h"
 #include "PN5180ISO14443.h"
 
-#define MULTI_RFID_DEBUG_ON 0
+// #define MULTI_RFID_DEBUG_ON 0
 #ifdef MULTI_RFID_DEBUG_ON
 #define MULTI_READ_DEBUG Serial.print
 #else
@@ -33,6 +33,7 @@ class Multi_RFID_PN5180_MCP23008{
         const uint8_t resetPin = 6;
         uint32_t readDelay;
         uint8_t readDelayTime = 20;
+        bool updated = false;
     
     public:
         void begin(){
@@ -51,11 +52,19 @@ class Multi_RFID_PN5180_MCP23008{
             readDelay = millis();
             for(int i = 0; i < numReaders; i++){
                 if(!bitRead(readerSelect, i)) continue;
-                nfc[i]->update();
-                
+                if(nfc[i]->update()){
+                    updated = true;
+                }
             }
             checkErrorState();
-            
+        }
+
+        bool isUpdated(){
+            if(updated){
+                updated = false;
+                return true;
+            }
+            return false;
         }
 
         void incrementalUpdate(uint8_t readerSelect = 0b00111111){ // so rfid reading does not block the program so frequently
@@ -118,7 +127,7 @@ class Multi_RFID_PN5180_MCP23008{
             for(int i = 0; i < numReaders; i++){
                 nfc[i]->errorCounter = 0;
             }
-            Serial.println("resetting");
+            //Serial.println("resetting");
             return mcpIsConnected();
         }
 };
