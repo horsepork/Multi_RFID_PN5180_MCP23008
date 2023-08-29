@@ -1,3 +1,6 @@
+#ifndef MULT_RFID_PN5180_MCP23008_H
+#define MULT_RFID_PN5180_MCP23008_H
+
 #include "Arduino.h"
 #include "Adafruit_MCP23X08.h"
 #include "PN5180.h"
@@ -131,3 +134,5 @@ class Multi_RFID_PN5180_MCP23008{
             return mcpIsConnected();
         }
 };
+
+#endif
