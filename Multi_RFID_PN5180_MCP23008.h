@@ -36,7 +36,6 @@ class Multi_RFID_PN5180_MCP23008{
         const uint8_t resetPin = 6;
         uint32_t readDelay;
         uint8_t readDelayTime = 20;
-        bool updated = false;
     
     public:
         void begin(){
@@ -50,8 +49,9 @@ class Multi_RFID_PN5180_MCP23008{
             spi.begin();
         }
 
-        void update(uint8_t readerSelect = 0b00111111){
-            if(millis() - readDelay < readDelayTime) return;
+        bool update(uint8_t readerSelect = 0b00111111){
+            if(millis() - readDelay < readDelayTime) return false;
+            bool updated = false;
             readDelay = millis();
             for(int i = 0; i < numReaders; i++){
                 if(!bitRead(readerSelect, i)) continue;
@@ -60,14 +60,7 @@ class Multi_RFID_PN5180_MCP23008{
                 }
             }
             checkErrorState();
-        }
-
-        bool isUpdated(){
-            if(updated){
-                updated = false;
-                return true;
-            }
-            return false;
+            return updated;
         }
 
         void incrementalUpdate(uint8_t readerSelect = 0b00111111){ // so rfid reading does not block the program so frequently
