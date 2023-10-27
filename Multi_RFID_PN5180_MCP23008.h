@@ -21,7 +21,7 @@ class Multi_RFID_PN5180_MCP23008{
             I2C_Address(_address),
             spi(_spi){
             for(int i = 0; i < numReaders; i++){
-                nfc[i] = new PN5180ISO14443(i, &mcp, I2C_Address, spi);
+                nfc[i] = new PN5180ISO14443(i, &mcp, spi);
             }
         }
     
@@ -79,12 +79,12 @@ class Multi_RFID_PN5180_MCP23008{
             //     Serial.print(" ");
             // }
             // Serial.println();
-            for(int i = 0; i < numReaders; i++){
-                if(nfc[i]->errorCounter > 10){
-                    hardReset();
-                    break;
-                }
-            }
+            // for(int i = 0; i < numReaders; i++){
+            //     if(nfc[i]->errorCounter > 10){ // not reimplemented with new setup yet
+            //         hardReset();
+            //         break;
+            //     }
+            // }
         }
 
         uint8_t *getTagData(uint8_t reader){
